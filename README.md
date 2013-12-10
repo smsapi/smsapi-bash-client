@@ -12,7 +12,7 @@ $ ./smsapi
 Usage: smsapi sms send [OPTIONS] <to> <message>
 Options:
   --username <string>
-  --password <password>
+  --password <password>  md5 api password
 
   --from <string>        Sender name
   --encoding <string>    Message encoding (default:utf8)
