@@ -1,6 +1,8 @@
 Wysyłanie smsów z poziomu linuxowego terminala
 ===========
 
+Klient napisany w bashu, pozwalający na wysyłanie wiadomości SMS w serwisie SMSAPI.pl
+
 ```bash
 $ ./smsapi sms send --username LOGIN --password PASS 48xxxyyyzzz,48zzzyyyxxx "Hello world"
 ```
@@ -22,4 +24,6 @@ Options:
 ```
 
 plik konfiguracyjny ".smsapi.rc" może się znajdowac w katalogu roboczym lub w katalogo domowym użytkownika
+
+=======
 
