@@ -1,0 +1,5 @@
+USERNAME=user
+PASSWORD=pass
+OPTIONS[encoding]=utf8
+#OPTIONS[from]=
+#OPTIONS[normalize]=1

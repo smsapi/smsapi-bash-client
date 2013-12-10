@@ -1,0 +1,146 @@
+#!/bin/bash
+
+VERBOSE=0
+USERNAME=""
+PASSWORD=""
+URI="https://ssl.smsapi.pl/api/"
+
+help() {
+
+	echo "Usage: smsapi sms send [OPTIONS] <to> <message>"
+
+	echo "Options:
+  --username <string>
+  --password <password>
+
+  --from <string>        Sender name
+  --encoding <string>    Message encoding (default:utf8)
+
+  -f, --fast <0|1>       Fast
+
+  -n, --normalize <0|1>  Normalize message
+  -v                     Verbose"
+	exit 0;
+}
+
+ARGS=( )
+declare -A OPTIONS
+
+if [ -f ./.smsapi.rc ]; then
+	source ./.smsapi.rc
+elif [ -f ~/.smsapi.rc ]; then
+	source ~/.smsapi.rc
+fi
+
+setOption() {
+	case $1 in
+		"f") OPTIONS[fast]="$2" ;;
+		"n") OPTIONS[normalize]="$2" ;;
+		*) OPTIONS[$1]="$2";
+	esac
+}
+
+setParam() {
+	case $1 in
+		"v") VERBOSE=$2 ;;
+		"username") USERNAME="$2" ;;
+		"password") PASSWORD="$2" ;;
+		"uri") URI="$2" ;;
+		*) OPTIONS[$1]="$2";
+	esac
+}
+
+while [ ! -z "$1" ]; do
+
+	if [[ $1 =~ ^-([a-zA-Z0-9])$ ]]; then
+		setParam ${BASH_REMATCH[1]} 1
+	elif [[ $1 =~ ^--([a-z0-9A-Z_\-]+)=(.*)$ ]]; then
+		setParam ${BASH_REMATCH[1]} "${BASH_REMATCH[2]}"
+	elif [[ $1 =~ ^--([a-z0-9A-Z_\-]+)$ ]]; then
+		shift
+		setParam ${BASH_REMATCH[1]} "$1"
+	elif [[ $1 =~ ^--$ ]]; then
+		shift
+		ARGS[${#ARGS[@]}]="$1"
+	else
+		ARGS[${#ARGS[@]}]="$1"
+	fi
+
+	shift
+done
+
+rawurlencode() {
+	local string="${1}"
+	local strlen=${#string}
+	local encoded=""
+
+	for (( pos=0 ; pos<strlen ; pos++ )); do
+		c=${string:$pos:1}
+		case "$c" in
+			[-_.~a-zA-Z0-9]) o="${c}" ;;
+			*) printf -v o '%%%02x' "'$c"
+		esac
+		encoded+="${o}"
+	done
+	echo "${encoded}"
+}
+
+verbose() {
+	if [ $VERBOSE == 1 ]; then
+		echo "$@" 1>&2
+	fi
+}
+
+sms_send() {
+
+	local url="${URI}sms.do"
+	local params=()
+	params[${#params[@]}]=username=$(rawurlencode "$USERNAME")
+	params[${#params[@]}]=password=$(rawurlencode "$PASSWORD")
+	params[${#params[@]}]=to=$(rawurlencode "$1")
+	params[${#params[@]}]=message=$(rawurlencode "$2")
+
+	if [ ! -z ${OPTIONS[normalize]} ] && [ ${OPTIONS[normalize]} -eq 1 ]; then
+		params[${#params[@]}]="normalize=1"
+	fi
+
+	if [ ! -z ${OPTIONS[encoding]} ]; then
+		params[${#params[@]}]="encoding=${OPTIONS[encoding]}"
+	else
+		params[${#params[@]}]="encoding=utf8"
+	fi
+
+	if [ ! -z ${OPTIONS[from]} ]; then
+		params[${#params[@]}]="from=${OPTIONS[from]}"
+	fi
+
+	if [ ! -z ${OPTIONS[fast]} ] && [ ${OPTIONS[fast]} -eq 1 ]; then
+		params[${#params[@]}]="fast=1"
+	fi
+
+	verbose "${params[@]}"
+	local data=$( printf "&%s" "${params[@]}" )
+
+	data=${data:1}
+	
+	RESULT=$(curl "$url" "$args" -d "$data" -s -S 2>&2)
+
+	echo $RESULT
+}
+
+if [ ${#ARGS[@]} -lt 2 ]; then help; fi
+
+COMMAND="${ARGS[0]}"
+ACTION="${ARGS[1]}"
+ARGS=("${ARGS[@]:2}")
+
+if [ "$COMMAND" == "sms" ]; then
+	if [ "$ACTION" == "send" ]; then
+		sms_send "${ARGS[0]}" "${ARGS[1]}"
+	else 
+		help "$COMMAND"
+	fi
+else
+	help
+fi
+
