@@ -110,10 +110,6 @@ sms_send() {
 		params[${#params[@]}]="encoding=utf8"
 	fi
 
-	if [ ! -z ${OPTIONS[from]} ]; then
-	
-		params[${#params[@]}]="from=${OPTIONS[from]}"
-	fi
 	if [ ! -z "${OPTIONS[from]}" ]; then
 		local fromName=$(rawurlencode "${OPTIONS[from]}")
 		params[${#params[@]}]="from=${fromName}"
