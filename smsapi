@@ -111,7 +111,12 @@ sms_send() {
 	fi
 
 	if [ ! -z ${OPTIONS[from]} ]; then
+	
 		params[${#params[@]}]="from=${OPTIONS[from]}"
+	fi
+	if [ ! -z "${OPTIONS[from]}" ]; then
+		local fromName=$(rawurlencode "${OPTIONS[from]}")
+		params[${#params[@]}]="from=${fromName}"
 	fi
 
 	if [ ! -z ${OPTIONS[fast]} ] && [ ${OPTIONS[fast]} -eq 1 ]; then
