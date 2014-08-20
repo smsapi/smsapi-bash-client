@@ -123,7 +123,7 @@ sms_send() {
 
 	data=${data:1}
 	
-	RESULT=$(curl "$url" "$args" -d "$data" -s -S 2>&2)
+	RESULT=$(curl "$url" -d "$data" -s -S 2>&2)
 
 	echo $RESULT
 }
