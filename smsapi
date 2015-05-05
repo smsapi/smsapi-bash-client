@@ -7,7 +7,7 @@ URI="https://ssl.smsapi.pl/api/"
 
 help() {
 
-	echo "Usage: smsapi sms send [OPTIONS] <to> <message>"
+	echo "Usage: smsapi sms send [OPTIONS] <to> <message> OR echo message | smsapi sms send [OPTIONS] <to>"
 
 	echo "Options:
   --username <string>
@@ -98,7 +98,7 @@ sms_send() {
 	params[${#params[@]}]=username=$(rawurlencode "$USERNAME")
 	params[${#params[@]}]=password=$(rawurlencode "$PASSWORD")
 	params[${#params[@]}]=to=$(rawurlencode "$1")
-	params[${#params[@]}]=message=$(rawurlencode "$2")
+	params[${#params[@]}]=message=$(rawurlencode "${2:-$(cat)}")
 
 	if [ ! -z ${OPTIONS[normalize]} ] && [ ${OPTIONS[normalize]} -eq 1 ]; then
 		params[${#params[@]}]="normalize=1"
