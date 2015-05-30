@@ -2,8 +2,8 @@ Wysyłanie smsów z poziomu linuxowego terminala
 ===========
 
 Klient napisany w bashu, pozwalający na wysyłanie wiadomości SMS w serwisie SMSAPI.pl
-Wymagania: `curl`
-Opcja --password-plain wymaga zainstalowanego narzędzia `openssl`
+Wymagania: `curl`  
+Opcja --password-plain wymaga zainstalowanego narzędzia `openssl`  
 
 ```bash
 $ ./smsapi sms send --username LOGIN --password PASS 48xxxyyyzzz,48zzzyyyxxx "Hello world"
