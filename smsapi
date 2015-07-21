@@ -3,7 +3,7 @@
 VERBOSE=0
 USERNAME=""
 PASSWORD=""
-URI="https://ssl.smsapi.pl/api/"
+URI="https://api.smsapi.pl/api/"
 
 help() {
 
