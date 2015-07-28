@@ -5,11 +5,12 @@ Klient napisany w bashu, pozwalający na wysyłanie wiadomości SMS w serwisie S
 
 ```bash
 $ ./smsapi sms send --username LOGIN --password PASS 48xxxyyyzzz,48zzzyyyxxx "Hello world"
+$ echo Hello world | ./smsapi sms send --username LOGIN --password PASS 48xxxyyyzzz,48zzzyyyxxx
 ```
 
 ```bash
 $ ./smsapi 
-Usage: smsapi sms send [OPTIONS] <to> <message>
+Usage: smsapi sms send [OPTIONS] <to> <message> OR echo message | smsapi sms send [OPTIONS] <to>
 Options:
   --username <string>
   --password <password>  md5 api password
