@@ -12,6 +12,7 @@ help() {
 	echo "Options:
   --username <string>
   --password <password>  md5 api password
+  --password-plain <password>  api password (plain text)
 
   --from <string>        Sender name
   --encoding <string>    Message encoding (default:utf8)
@@ -45,6 +46,7 @@ setParam() {
 		"v") VERBOSE=$2 ;;
 		"username") USERNAME="$2" ;;
 		"password") PASSWORD="$2" ;;
+                "password-plain") PASSWORD=$(echo -n $2 | openssl dgst -md5) ;;
 		"uri") URI="$2" ;;
 		*) OPTIONS[$1]="$2";
 	esac
