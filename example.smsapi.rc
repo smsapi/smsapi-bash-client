@@ -1,5 +1,7 @@
-USERNAME=user
-PASSWORD=pass
+OAUTH="TOKEN"
+SERVICE="SMSAPI_PL"
+#OR
+#SERVICE="SMSAPI_COM"
 OPTIONS[encoding]=utf8
 #OPTIONS[from]=
 #OPTIONS[normalize]=1
