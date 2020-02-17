@@ -96,7 +96,7 @@ sms_send() {
 	local data=$( printf "&%s" "${params[@]}" )
 	data=${data:1}
 	token=${OAUTH}
-	RESULT=$(curl "$url" --header "Authorization: Bearer $token" -d "$data" -s -S 2>&2)
+	RESULT=$(curl "$url" -A "smsapi/bash-client" --header "Authorization: Bearer $token" -d "$data" -s -S 2>&2)
 	echo $RESULT
 }
 if [ ${#ARGS[@]} -lt 2 ]; then help; fi
